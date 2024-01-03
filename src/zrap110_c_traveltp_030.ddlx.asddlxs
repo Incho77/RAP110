@@ -1,12 +1,12 @@
 @Metadata.layer: #CUSTOMER
 @UI: {
   headerInfo: {
-    typeName: 'Booking',
-    typeNamePlural: 'Bookings',
+    typeName: 'Travel',
+    typeNamePlural: 'Travels',
     title: {
       type: #STANDARD,
-      label: 'Booking',
-      value: 'BookingID'
+      label: 'Travel',
+      value: 'TravelID'
     }
   },
   presentationVariant: [ {
@@ -19,22 +19,39 @@
     } ]
   } ]
 }
-annotate view ZRAP110_C_BOOKINGTP_030 with
+annotate view ZRAP110_C_TRAVELTP_030 with
 {
   @UI.facet: [ {
-    id: 'idBooking',
-    purpose: #STANDARD,
+    id: 'idCollection',
+    type: #COLLECTION,
+    label: 'Travel',
+    position: 10
+  },
+  {
+    id: 'idIdentification',
+    parentId: 'idCollection',
     type: #IDENTIFICATION_REFERENCE,
+    label: 'General Information',
+    position: 10
+  },
+  {
+    id: 'idLineitem',
+    type: #LINEITEM_REFERENCE,
     label: 'Booking',
-    position: 10
+    position: 20 ,
+    targetElement: '_Booking'
   } ]
-  @UI.lineItem: [ {
-    position: 10 ,
-    importance: #HIGH
-  } ]
-  @UI.identification: [ {
-    position: 10
-  } ]
+
+  @UI.lineItem: [
+    { position: 10 , importance: #HIGH }
+   ,{ type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' }  //added line
+   ,{ type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel' }  //added line
+  ]
+  @UI.identification: [
+    { position: 10 , importance: #HIGH }
+   ,{ type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' }  //added line
+   ,{ type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel' }  //added line
+  ]
   @UI.selectionField: [ {
     position: 10
   } ]
@@ -47,7 +64,10 @@ annotate view ZRAP110_C_BOOKINGTP_030 with
   @UI.identification: [ {
     position: 20
   } ]
-  BookingID;
+  @UI.selectionField: [ {
+    position: 20
+  } ]
+  AgencyID;
 
   @UI.lineItem: [ {
     position: 30 ,
@@ -56,70 +76,60 @@ annotate view ZRAP110_C_BOOKINGTP_030 with
   @UI.identification: [ {
     position: 30
   } ]
-  BookingDate;
-
-  @UI.lineItem: [ {
-    position: 40 ,
-    importance: #HIGH
-  } ]
-  @UI.identification: [ {
-    position: 40
-  } ]
-  @UI.textArrangement: #TEXT_FIRST
+  @UI.textArrangement: #TEXT_LAST
   @UI.selectionField: [ {
-    position: 40
+    position: 30
   } ]
   CustomerID;
 
-  @UI.lineItem: [ {
-    position: 50 ,
-    importance: #HIGH
+  @UI.identification: [ {
+    position: 40
   } ]
+  BeginDate;
+
   @UI.identification: [ {
     position: 50
   } ]
-  CarrierID;
+  EndDate;
 
-  @UI.lineItem: [ {
-    position: 60 ,
-    importance: #HIGH
-  } ]
   @UI.identification: [ {
     position: 60
   } ]
-  ConnectionID;
+  BookingFee;
 
-  @UI.lineItem: [ {
-    position: 70 ,
-    importance: #HIGH
-  } ]
   @UI.identification: [ {
     position: 70
   } ]
-  FlightDate;
+  TotalPrice;
+
+  @UI.identification: [ {
+    position: 90
+  } ]
+  Description;
 
   @UI.lineItem: [ {
-    position: 80 ,
-    importance: #HIGH
+  position: 100 ,
+  importance: #HIGH
+  ,criticality: 'OverallStatusIndicator'    //added line
   } ]
   @UI.identification: [ {
-    position: 80
+    position: 100
+   ,criticality: 'OverallStatusIndicator'   //added line
   } ]
-  FlightPrice;
+  @UI.textArrangement: #TEXT_ONLY
+  OverallStatus;
 
-  @UI: { lineItem:       [ { position: 100, criticality: 'BookingStatusIndicator', importance: #HIGH } ], //Enhanced ( New: Criticality )
-         identification: [ { position: 100, criticality: 'BookingStatusIndicator' } ], //Enhanced ( New: Criticality )
-         textArrangement: #TEXT_ONLY }
-  BookingStatus;
+  @UI.identification: [ {
+    position: 110 ,
+    label: 'Upload a File'
+  } ]
+  Attachment;
 
-  @UI: {
-  dataPoint: { title: 'Days to Flight Indicator',
-              criticality: 'DaysToFlightIndicator',
-              targetValue: #(InitialDaysToFlight),
-              visualization: #PROGRESS  },
-  lineItem:       [{ type: #AS_DATAPOINT, position: 110, importance: #HIGH}],
-  identification: [{ type: #AS_DATAPOINT, position: 110 }]  }
-  RemainingDaysToFlight;
+  @UI.hidden: true
+  MimeType;
+
+  @UI.hidden: true
+  FileName;
 
   @UI.hidden: true
   LocalLastChangedAt;
